@@ -18,7 +18,7 @@ Library         BuiltIn
 | ${Picture_F_LOCATOR}         |  //td[.='Picture']/following-sibling::td
 | ${Address_F_LOCATOR}         |  //td[.='Address']/following-sibling::td
 | ${State_and_City_F_LOCATOR}  |  //td[.='State and City']/following-sibling::td
-| ${BUTTON_CLOSE_CHECK-TABLE}  |  #closeLargeModal
+| ${BUTTON_CLOSE_CHECK-TABLE}  |  \#closeLargeModal
 
 
 *** Keywords ***

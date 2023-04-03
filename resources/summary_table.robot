@@ -19,6 +19,7 @@ Library         BuiltIn
 | ${Address_F_LOCATOR}         |  //td[.='Address']/following-sibling::td
 | ${State_and_City_F_LOCATOR}  |  //td[.='State and City']/following-sibling::td
 | ${BUTTON_CLOSE_CHECK-TABLE}  |  \#closeLargeModal
+| ${summary_table}             |  .modal-dialog.modal-lg
 
 
 *** Keywords ***
@@ -75,3 +76,6 @@ Check data in summary
     Should Contain            ${State_and_City}  ${CITY}
     Should Contain            ${State_and_City}  ${STATE}
     Take Screenshot
+
+Check sumarry is not show
+    Get Element Count         ${summary_table}  ==  0

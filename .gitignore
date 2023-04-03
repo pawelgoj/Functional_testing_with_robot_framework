@@ -7,6 +7,8 @@ __pycache__/
 browser/
 *.html
 *.xml
+*.txt
+*.out
 playwright-log.txt
 
 

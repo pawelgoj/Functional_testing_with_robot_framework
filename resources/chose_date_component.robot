@@ -31,31 +31,32 @@ Fill calendar
 
 
 Chose month
-    [Arguments]                    ${month}
-    Wait For Elements State        ${MONTH_LIST_LOCATOR}  visible  timeout=2 s
-    Click                          ${MONTH_LIST_LOCATOR}  left
-    Select Options By  ${MONTH_LIST_LOCATOR}  text  ${month}
+    [Arguments]                ${month}
+    Wait For Elements State    ${MONTH_LIST_LOCATOR}  visible  timeout=2 s
+    Click                      ${MONTH_LIST_LOCATOR}  left
+    Select Options By          ${MONTH_LIST_LOCATOR}  text  ${month}
 
 
 Chose year
-    [Arguments]                    ${year}
+    [Arguments]                ${year}
 
-    Wait For Elements State        ${YEAR_LIST_LOCATOR}  visible  timeout=2 s
-    Click                          ${YEAR_LIST_LOCATOR}  left
-    Select Options By  ${YEAR_LIST_LOCATOR}   text  ${year}
+    Wait For Elements State    ${YEAR_LIST_LOCATOR}  visible  timeout=2 s
+    Click                      ${YEAR_LIST_LOCATOR}  left
+    Select Options By          ${YEAR_LIST_LOCATOR}   text  ${year}
 
 
 Chose day of the month
-    [Arguments]           ${day}  ${month}
+    [Arguments]                ${day}  ${month}
 
-    ${DAY}                Catenate  SEPARATOR=  ${DAY_LOCATOR}  ${day}
-    ${month}=             Convert To Lower Case  ${month}
-    ${elements}=          Get Elements  ${DAY}
+    ${DAY}                     Catenate  SEPARATOR=  ${DAY_LOCATOR}  ${day}
+    ${month}=                  Convert To Lower Case  ${month}
+    ${elements}=               Get Elements  ${DAY}
+
     FOR   ${ELEMENT}  IN  @{elements}
-        ${atr_value}=     Get Attribute   ${ELEMENT}  aria-label
-        ${atr_value}=     Convert To Lower Case  ${atr_value}
+        ${atr_value}=          Get Attribute   ${ELEMENT}  aria-label
+        ${atr_value}=          Convert To Lower Case  ${atr_value}
         IF  "${month}" in "${atr_value}"
-            Click  ${ELEMENT}
+            Click              ${ELEMENT}
             BREAK
         END
     END

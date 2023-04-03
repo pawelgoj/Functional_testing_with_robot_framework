@@ -5,6 +5,9 @@ Library         Browser
 Library         RPA.FileSystem
 Library         BuiltIn
 Library         String
+Library         FakerLibrary    locale=en_US    seed=666
+Library         Collections
+
 Resource         ../resources/form.robot
 Resource         ../resources/summary_table.robot
 Resource         ../resources/chose_date_component.robot
@@ -16,35 +19,46 @@ Suite Teardown  Log  'Done!'
 
 *** Variables ***
 | ${PATH_TO_TEST-DATA-DIR}     |  ./test_data/
-| #VALUES_TO_FILL_FORM         |
-| ${NAME}                      |  Test
-| ${SURNAME}                   |  Test
-| ${EMAIL}                     |  user@mail.com
-| ${Gender}                    |  male
-| ${PHONE}                     |  4850123456
-| ${month_of_birth}            |  July
-| ${day_of_birth}              |  26
-| ${year_of_birth}             |  1990
-| ${month_of_Birth}            |  July
+# Data for form
+# If you use pipeline syntax remember about columns for list elements
+| @{Genders}=                  |  male | female | other |
+| @{SUBJECTS}=                 |  Maths | Chemistry |
 | ${Picture}                   |  img.png
-| ${Address}                   |  ul. Cos 45/9 Drno
-| @{SUBJECTS}=                 |  Maths  Chemistry
-| @{HOBBIES}=                  |  Sports  Reading  Music
 | ${STATE_OPTION_NR}           |  0
 | ${CITY_OPTION_NR}            |  0
+# Normal syntax list declaration
+@{HOBBIES}=  Sports  Reading  Music
 
 
 *** test cases ***
 Fill form positive test case
     [Documentation]            It is fill form positive test case
     [Tags]                     Positive test case
+    # Generate some random data
+    ${NAME}=                   FakerLibrary.Name
+    ${SURNAME}=                FakerLibrary.Last Name
+    ${EMAIL}=                  FakerLibrary.Email
+    ${Address}=                FakerLibrary.Address
+    # Use python code to get random item from list, random is python module
+    ${Gender}=                 Evaluate   random.choice($Genders)   modules=random
+    ${PHONE}=                  FakerLibrary.Random Number  digits=10  fix_len=True
+    ${PHONE}=                  Convert To String  ${PHONE}
+    ${year_of_birth}=          FakerLibrary.Random Int  min=1990  max=2100  step=1
+    ${year_of_birth}=          Convert To String  ${year_of_birth}
+
+    ${month_of_birth}=         FakerLibrary.Month Name
+    ${day_of_birth}=           FakerLibrary.Random Int  min=1  max=28  step=1
+    ${day_of_birth}=           Convert To String  ${day_of_birth}
+
+    # Open new page
     New Context                viewport={'width': 1920, 'height': 1080}  tracing=trace.zip
     New Page                   https://demoqa.com/automation-practice-form
 
     ${PATH_TO_IMG}             Catenate  SEPARATOR=  ${PATH_TO_TEST-DATA-DIR}  ${Picture}
-    # User defined keyword
-    &{CITY_AND_STATE}=         Fill form with data  SUBJECTS=@{SUBJECTS}
-    ...                                             HOBBIES=@{HOBBIES}
+
+    # Fill form with data is user defined keyword from form resources
+    &{CITY_AND_STATE}=         Fill form with data  SUBJECTS=${SUBJECTS}
+    ...                                             HOBBIES=${HOBBIES}
     ...                                             NAME=${NAME}
     ...                                             LAST_NAME=${SURNAME}
     ...                                             GENDER=${Gender}
@@ -62,7 +76,7 @@ Fill form positive test case
 
     Fill calendar             day_of_month=${day_of_birth}
     ...                       year=${year_of_birth}
-    ...                       month=${month_of_Birth}
+    ...                       month=${month_of_birth}
 
     Click submit button
 
@@ -76,8 +90,15 @@ Fill form positive test case
     ...                        Address=${Address}
     ...                        CITY=${CITY_AND_STATE.city}
     ...                        STATE=${CITY_AND_STATE.state}
-    ...                        SUBJECTS=@{SUBJECTS}
-    ...                        HOBBIES=@{HOBBIES}
+    ...                        SUBJECTS=${SUBJECTS}
+    ...                        HOBBIES=${HOBBIES}
     ...                        day_of_month=${day_of_birth}
     ...                        year=${year_of_birth}
-    ...                        month=${month_of_Birth}
+    ...                        month=${month_of_birth}
+
+
+
+
+Fill form negative test case
+    [Documentation]            It is fill form negative test case
+    [Tags]                     negative test case

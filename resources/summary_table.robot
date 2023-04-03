@@ -38,32 +38,40 @@ Check data in summary
     ...                        ${year}=1990
     ...                        ${month}=May
 
-    [Documentation]            Check that the summary has the correct data
-    ${Name_surname}=  Catenate  ${NAME}  ${LAST_NAME}
-    Get Text    ${Student_Name}  ==  ${Name_surname}
-    Get Text    ${Student_Email}  ==  ${EMAIL}
-    ${Gender_TC}=  Convert To Title Case  ${Gender}
-    Get Text    ${Gender_F_LOCATOR}  ==  ${Gender_TC}
-    Get Text    ${Mobile_F_LOCATOR}  ==  ${PHONE}
+    [Documentation]           Check that the summary has the correct data
 
-    ${Date_of_Birth}=  Catenate  ${day_of_month}  ${month}
-    ${Date_of_Birth}=  Catenate  SEPARATOR=,  ${Date_of_Birth}  ${year}
-    Get Text    ${Date_of_Birth_F_LOCATOR}  ==  ${Date_of_Birth}
+    # Replace \n with space, the ${SPACE} is not user definet variable is special buid in variable
+    # Represents space
+    ${Address}=               Replace String  ${Address}  \n  ${SPACE}
 
-    ${Subjects_in_form}=  Get Text    ${Subjects_F_LOCATOR}
-    @{SUBJECTS}=               Split String  ${SUBJECTS}[0]
+    ${Name_surname}=          Catenate  ${NAME}  ${LAST_NAME}
+    Get Text                  ${Student_Name}  ==  ${Name_surname}
+    Get Text                  ${Student_Email}  ==  ${EMAIL}
+    ${Gender_TC}=             Convert To Title Case  ${Gender}
+    Get Text                  ${Gender_F_LOCATOR}  ==  ${Gender_TC}
+    Get Text                  ${Mobile_F_LOCATOR}  ==  ${PHONE}
+
+    ${Date_of_Birth}=         Catenate  ${day_of_month}  ${month}
+    ${Date_of_Birth}=         Catenate  SEPARATOR=,  ${Date_of_Birth}  ${year}
+    Get Text                  ${Date_of_Birth_F_LOCATOR}  ==  ${Date_of_Birth}
+
+    ${Subjects_in_form}=      Get Text    ${Subjects_F_LOCATOR}
+    @{SUBJECTS}=              Split String  ${SUBJECTS}[0]
+
     FOR  ${SUBJECT}  IN  @{SUBJECTS}
-        Should Contain  ${Subjects_in_form}  ${SUBJECT}
+        Should Contain        ${Subjects_in_form}  ${SUBJECT}
     END
 
-    ${Hobbies_in_form}=  Get Text    ${Hobbies_F_LOCATOR}
+    ${Hobbies_in_form}=       Get Text    ${Hobbies_F_LOCATOR}
     @{HOBBIES}=               Split String  ${HOBBIES}[0]
+
     FOR  ${HOBBY}  IN  @{HOBBIES}
-        Should Contain  ${Hobbies_in_form}  ${HOBBY}
+        Should Contain        ${Hobbies_in_form}  ${HOBBY}
     END
 
-    Get Text    ${Picture_F_LOCATOR}  ==  ${Picture}
-    Get Text    ${Address_F_LOCATOR}  ==  ${Address}
-    ${State_and_City}=  Get Text    ${State_and_City_F_LOCATOR}
-    Should Contain  ${State_and_City}  ${CITY}
-    Should Contain  ${State_and_City}  ${STATE}
+    Get Text                  ${Picture_F_LOCATOR}  ==  ${Picture}
+    Get Text                  ${Address_F_LOCATOR}  ==  ${Address}
+    ${State_and_City}=        Get Text    ${State_and_City_F_LOCATOR}
+    Should Contain            ${State_and_City}  ${CITY}
+    Should Contain            ${State_and_City}  ${STATE}
+    Take Screenshot

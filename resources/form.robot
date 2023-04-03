@@ -66,7 +66,7 @@ Fill form with data
     ...                        ${NAME}=Test
     ...                        ${LAST_NAME}=Test
     ...                        ${EMAIL}=test@test.com
-    ...                        ${GENDER}=male     # or famale or other
+    ...                        ${GENDER}=male     # or female or other
     ...                        ${PHONE}=4850123456
     ...                        ${PICTURE_PATH}=.\\test_data\\img.png
     ...                        ${Address}=ul. Cos 45/9 Drno
@@ -74,9 +74,7 @@ Fill form with data
     ...                        ${CITY_NR_OF_OPTION}=0
 
     [Documentation]            Filling form with given data
-    # How handle with lists, you can split string argumant
-    @{SUBJECTS}=               Split String  ${SUBJECTS}[0]
-    @{HOBBIES}=                Split String  ${HOBBIES}[0]
+
     Fill Text                  ${NAME_LOCATOR}  ${NAME}
     Fill Text                  ${LAST_NAME_LOCATOR}  ${LAST_NAME}
     Fill Text                  ${EMAIL_LOCATOR}  ${EMAIL}
@@ -84,7 +82,7 @@ Fill form with data
     # IF comapre two strings, always use "" for variables
     IF  "${GENDER}" == "male"
         Click                  ${RADIO_INPUT_MALE}  left
-    ELSE IF  "${GENDER}" == "famale"
+    ELSE IF  "${GENDER}" == "female"
         Click                  ${RADIO_INPUT_FAMALE}  left
     ELSE IF  "${GENDER}" == "other"
         Click                  ${RADIO_INPUT_OTHER}  left

@@ -10,6 +10,7 @@ browser/
 *.txt
 *.out
 playwright-log.txt
+resoults/
 
 
 # C extensions

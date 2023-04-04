@@ -1,50 +1,118 @@
 
+# Example how use user defined defind libs in Robot framework
+
 *** Settings ***
-Documentation   Testing student rfill formegistration form
-Library         Browser
-Library         RPA.FileSystem
-Library         BuiltIn
-Library         String
-Library         FakerLibrary    locale=en_US    seed=666
-Library         Collections
+Documentation     Test Login form
 
-Resource        ../resources/form.robot
+# User defined libs
+Library           ../user_pop_lib/PlaywrightSettings.py
+Library           ../user_pop_lib/pages/Login.py
+Library           ../user_pop_lib/pages/Profile.py
+Library           ../user_pop_lib/pages/BookStore.py
 
-Test Setup      Setup for test  ${BROWSER}  ${Page_width}  ${Page_hight}
 
-Test Teardown   Close Browser    CURRENT
+Library           FakerLibrary    locale=en_US    seed=666
 
-Suite Teardown  Log  'Done!'
+Test Setup        Tests Setup
+Test Teardown     close browser
+Suite Teardown    Log  'Done!'
+
 
 
 *** Variables ***
-| ${PATH_TO_TEST-DATA-DIR}     |  ./test_data/
-| ${BROWSER}                   |  chromium
-| ${Page_width}                |  1920
-| ${Page_hight}                |  1080
-| ${Page_url}                  |  https://demoqa.com/automation-practice-form
+| ${BROWSER}                   |  chromium                    |
+| ${Page_width}                |  1920                        |
+| ${Page_hight}                |  1080                        |
+| ${Login_url}                 |  https://demoqa.com/login    |
+| ${Profie_url}                |  https://demoqa.com/profile  |
+| ${Book_store_url}            |  https://demoqa.com/books    |
+| ${registeret_user_name}      |  Test                        |
+| ${registered_user_password}  |  \#SuperPasword123456        |
 
-# Data for form
-# If you use pipeline syntax remember about columns for list elements
-| @{Genders}=                  |  male | female | other |
-| @{SUBJECTS}=                 |  Maths | Chemistry |
-| ${Picture}                   |  img.png
-| ${STATE_OPTION_NR}           |  0
-| ${CITY_OPTION_NR}            |  0
-# Normal syntax list declaration
-@{HOBBIES}=  Sports  Reading  Music
 
 
 *** test cases ***
-Fill form positive test case
-    [Documentation]            It is fill form positive test case
-    [Tags]                     Positive test case
+Unregistered user fills out form
+    [Documentation]  Unlogged user fills out form
+    [Tags]  Negative test case
+    # You can use name of lib befor key word eg. Login.Init login page
+    # but is not necessary
+    Login.Init login page                      ${page}
+    ${name}                                    FakerLibrary.Name
+    Login.fill user name field                 ${name}
+    ${password}                                FakerLibrary.Password  length=10  special_chars=True
+    ...                                        digits=True  upper_case=True  lower_case=True
+    fill user password                         ${password}
+    click login button
+    check message to user                      Invalid username or password!
+    # It is user defined "take screenshot" not form robot framework
+    take screenshot                            ./resoults/test_unlogged_user.png
+    # To add image to logs use html
+    Log                                        <img src="test_unlogged_user.png">  html=yes
 
-    &{CITY_AND_STATE}=               Parametrized test fill form with test data  ${SUBJECTS}  ${HOBBIES}  ${NAME}
-    ...                                 ${SURNAME}  ${Gender}  ${EMAIL}  ${PHONE}  ${Address}  ${STATE_OPTION_NR}
-    ...                                 ${CITY_OPTION_NR}  ${day_of_birth}  ${year_of_birth}  ${month_of_birth}
 
-    Take Screenshot
+The registered user login and logout
+    [Documentation]  The user login
+    [Tags]  Positive test case
+    # Keyword                                   Data
+    ${page}  Log in to profile registered user
+
+    init profile                                ${page}
+    check logged to profile                     ${Profie_url}
+    take screenshot                             ./resoults/test_loged_user.png
+    Log                                         <img src="test_loged_user.png">  html=yes
+
+
+The registred user go to book store page
+    [Documentation]  The user login
+    [Tags]  Positive test case
+    ${page}  Log in to profile registered user
+    init profile                                 ${page}
+    check logged to profile                      ${Profie_url}
+    go to book store
+    init book store                              ${page}
+    check on book store                          ${Book_store_url}
+    take screenshot                              ./resoults/test_book_store_page.png
+    Log                                          <img src="test_book_store_page.png">  html=yes
+
+
+The registered user tries to delete account but dismiss dialog
+    [Documentation]  The registered user tries to delete account
+    ...              but dismiss dialog
+    [Tags]  Positive test case
+    ${page}  Log in to profile registered user
+    init profile                          ${page}
+    try delete but dismiss dialog
+    check logged to profile               ${Profie_url}
+    take screenshot                       ./resoults/test_tries_to_delete_account_user.png
+    Log                                   <img src="test_tries_to_delete_account_user.png">  html=yes
+
+
+The registered user delete account
+    [Documentation]  The registered user delete account
+    [Tags]  Positive test case
+    ${page}  Log in to profile registered user
+    init profile                           ${page}
+    delete account
+    check on login page                    ${Login_url}
+    take screenshot                        ./resoults/test_loged_user.png
+    Log                                    <img src="test_loged_user.png">  html=yes
+    ${page}  Log in to profile registered user
+    check message to user                  Invalid username or password!
+    take screenshot                        ./resoults/test_unlogged_user.png
+    Log                                    <img src="test_unlogged_user.png">  html=yes
+
 
 
 *** Keywords ***
+Tests Setup
+    launch browser                         ${BROWSER}  ${Page_width}  ${Page_hight}
+    ${page}  open web                      ${Login_url}
+    Set Test Variable                      ${page}
+
+Log in to profile registered user
+    Init login page                        ${page}
+    fill user name field                   ${registeret_user_name}
+    fill user password                     ${registered_user_password}
+    click login button
+    RETURN                                 ${page}

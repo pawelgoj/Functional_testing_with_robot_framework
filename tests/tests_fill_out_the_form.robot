@@ -13,7 +13,7 @@ Resource        ../resources/summary_table.robot
 Resource        ../resources/chose_date_component.robot
 Resource        ../resources/utils.robot
 
-Test Setup      Setup for test  ${BROWSER}  ${Page_width}  ${Page_hight}
+Test Setup      Setup For Test  ${BROWSER}  ${Page_width}  ${Page_hight}
 
 Test Teardown   Close Browser    CURRENT
 
@@ -43,12 +43,12 @@ Fill form positive test case
     [Documentation]            It is fill form positive test case
     [Tags]                     Positive test case
 
-    &{CITY_AND_STATE}=               Parametrized test fill form with test data  ${SUBJECTS}  ${HOBBIES}  ${NAME}
+    &{CITY_AND_STATE}=               Parametrized Test Fill Form With Test Data  ${SUBJECTS}  ${HOBBIES}  ${NAME}
     ...                                 ${SURNAME}  ${Gender}  ${EMAIL}  ${PHONE}  ${Address}  ${STATE_OPTION_NR}
     ...                                 ${CITY_OPTION_NR}  ${day_of_birth}  ${year_of_birth}  ${month_of_birth}
 
     # User defined keyword
-    Check data in summary      NAME=${NAME}
+    Check Data In Summary      NAME=${NAME}
     ...                        LAST_NAME=${SURNAME}
     ...                        GENDER=${Gender}
     ...                        EMAIL=${EMAIL}
@@ -106,12 +106,12 @@ The user enters the wrong phone number
     [Tags]                     negative test case
     ${PHONE}=                  FakerLibrary.Random Number  digits=9  fix_len=True
     ${PHONE}=                  Convert To String  ${PHONE}
-    Parametrized test fill form wrong test data and check response  ${SUBJECTS}  ${HOBBIES}  ${NAME}  ${SURNAME}  ${Gender}
+    Parametrized Test Fill Form Wrong Test Data And Check Response  ${SUBJECTS}  ${HOBBIES}  ${NAME}  ${SURNAME}  ${Gender}
     ...                                                             ${EMAIL}  ${PHONE}  ${Address}  ${STATE_OPTION_NR}  ${CITY_OPTION_NR}
     ...                                                             ${day_of_birth}  ${year_of_birth}  ${month_of_birth}
 
     ${PHONE}=                  FakerLibrary.Random Letters   	length=10
-    Parametrized test fill form wrong test data and check response  ${SUBJECTS}  ${HOBBIES}  ${NAME}  ${SURNAME}  ${Gender}
+    Parametrized Test Fill Form Wrong Test Data And Check Response  ${SUBJECTS}  ${HOBBIES}  ${NAME}  ${SURNAME}  ${Gender}
     ...                                                             ${EMAIL}  ${PHONE}  ${Address}  ${STATE_OPTION_NR}  ${CITY_OPTION_NR}
     ...                                                             ${day_of_birth}  ${year_of_birth}  ${month_of_birth}
 
@@ -119,13 +119,13 @@ The user enters the wrong phone number
 
 *** Keywords ***
 # Define setup for tests
-Setup for test
+Setup For Test
     [Arguments]  ${BROWSER}  ${Page_width}  ${Page_hight}
 
     Get web browser  ${BROWSER}  ${Page_width}  ${Page_hight}
     Set Test random data
 
-Get web browser
+Get Web Browser
     [Arguments]  ${BROWSER}  ${Page_width}  ${Page_hight}
 
     New Browser  browser=${BROWSER}  headless=True  timeout=120
@@ -133,7 +133,7 @@ Get web browser
     # Open new page
     New Page     ${Page_url}
 
-Set Test random data
+Set Test Random Data
     # Returned data from Make random data for test
     ${NAME}  ${SURNAME}  ${EMAIL}
     ...  ${Address}  ${Gender}
@@ -153,15 +153,15 @@ Set Test random data
     Set Test Variable  ${day_of_birth}  ${day_of_birth}
 
 
-Parametrized test fill form with test data
+Parametrized Test Fill Form With Test Data
     [Arguments]  ${SUBJECTS}  ${HOBBIES}  ${NAME}  ${SURNAME}  ${Gender}
     ...          ${EMAIL}  ${PHONE}  ${Address}  ${STATE_OPTION_NR}  ${CITY_OPTION_NR}
     ...          ${day_of_birth}  ${year_of_birth}  ${month_of_birth}
 
     ${PATH_TO_IMG}=      Catenate  SEPARATOR=  ${PATH_TO_TEST-DATA-DIR}  ${Picture}
 
-    # Fill form with data is user defined keyword from form resources
-    &{CITY_AND_STATE}=   Fill form with data  SUBJECTS=${SUBJECTS}
+    # Fill Form With Data is user defined keyword from form resources
+    &{CITY_AND_STATE}=   Fill Form With Data  SUBJECTS=${SUBJECTS}
     ...                                       HOBBIES=${HOBBIES}
     ...                                       NAME=${NAME}
     ...                                       LAST_NAME=${SURNAME}
@@ -178,25 +178,25 @@ Parametrized test fill form with test data
     Log                        ${CITY_AND_STATE.city}
     Log                        ${CITY_AND_STATE.state}
 
-    Fill calendar              day_of_month=${day_of_birth}
+    Fill Calendar              day_of_month=${day_of_birth}
     ...                        year=${year_of_birth}
     ...                        month=${month_of_birth}
 
-    Click submit button
+    Click Submit Button
     RETURN                     &{CITY_AND_STATE}
 
 
-Parametrized test fill form wrong test data and check response
+Parametrized Test Fill Form Wrong Test Data And Check Response
     [Arguments]  ${SUBJECTS}  ${HOBBIES}  ${NAME}  ${SURNAME}  ${Gender}
     ...          ${EMAIL}  ${PHONE}  ${Address}  ${STATE_OPTION_NR}  ${CITY_OPTION_NR}
     ...          ${day_of_birth}  ${year_of_birth}  ${month_of_birth}
     Get web browser  ${BROWSER}  ${Page_width}  ${Page_hight}
 
-    Parametrized test fill form with test data  ${SUBJECTS}  ${HOBBIES}  ${NAME}  ${SURNAME}
+    Parametrized Test Fill Form With Test Data  ${SUBJECTS}  ${HOBBIES}  ${NAME}  ${SURNAME}
     ...          ${Gender}  ${EMAIL}  ${PHONE}  ${Address}  ${STATE_OPTION_NR}
     ...          ${CITY_OPTION_NR}  ${day_of_birth}  ${year_of_birth}  ${month_of_birth}
 
-    Check sumarry is not show
+    Check Sumarry Is Not Show
     Take Screenshot
     # When we used keyword in Template, this keyword must have [Teardown]
     # If we want make something after each iteration

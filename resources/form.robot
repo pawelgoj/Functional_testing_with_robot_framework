@@ -36,11 +36,11 @@ Library         BuiltIn
 *** Keywords ***
 # user defined keywords
 
-Click submit button
+Click Submit Button
     Click                      ${SUBMIT_BUTTON}  left
 
 
-Select state option
+Select State Option
     [Arguments]                ${nr_option}=0
     ${STATE_LOCATOR_NR}        Catenate  SEPARATOR=  ${STATE_OPTON}  ${nr_option}
     ${text}                    Get Text  ${STATE_LOCATOR_NR}
@@ -48,7 +48,7 @@ Select state option
     RETURN                     ${text}
 
 
-Select city option
+Select City Option
     [Arguments]                ${nr_option}=0
     ${CITY_LOCATOR_NR}         Catenate  SEPARATOR=  ${CITY_OPTON}  ${nr_option}
     ${text}                    Get Text  ${CITY_LOCATOR_NR}
@@ -56,7 +56,7 @@ Select city option
     RETURN                     ${text}
 
 
-Fill form with data
+Fill Form With Data
     # Only named args, before @{} will be positional,
     # lists can't be use like named argumants
     [Arguments]
@@ -117,9 +117,9 @@ Fill form with data
     Fill Text                  ${CURRENT_ADDRESS}  ${Address}
 
     Click                      ${STATE_LOCATOR}  left
-    ${State}                   Select state option  nr_option=${STATE_NR_OF_OPTION}
+    ${State}                   Select State Option  nr_option=${STATE_NR_OF_OPTION}
     Click                      ${CITY_LOCATOR}  left
-    ${City}                    Select city option  nr_option=${CITY_NR_OF_OPTION}
+    ${City}                    Select City Option  nr_option=${CITY_NR_OF_OPTION}
     &{CITY_AND_STATE}=         Create Dictionary  city=${City}  state=${State}
     RETURN    &{CITY_AND_STATE}
 

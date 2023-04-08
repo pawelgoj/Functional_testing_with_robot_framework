@@ -16,3 +16,6 @@ class BookStore:
         text = self.page.locator(self.header_loc).text_content()
 
         assert text == page_header
+
+    def select_book(self, book: str = "Git Pocket Guide"):
+        self.page.get_by_text(book).click()

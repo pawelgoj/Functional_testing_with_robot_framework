@@ -23,7 +23,7 @@ Library         BuiltIn
 
 
 *** Keywords ***
-Check data in summary
+Check Data In Summary
     [Arguments]                ${NAME}=Test
     ...                        ${LAST_NAME}=Test
     ...                        ${EMAIL}=test@test.com
@@ -77,5 +77,5 @@ Check data in summary
     Should Contain            ${State_and_City}  ${STATE}
     Take Screenshot
 
-Check sumarry is not show
+Check Sumarry Is Not Show
     Get Element Count         ${summary_table}  ==  0

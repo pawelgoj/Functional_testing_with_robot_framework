@@ -19,25 +19,25 @@ Library         String
 
 *** Keywords ***
 
-Fill calendar
+Fill Calendar
     [Arguments]                ${day_of_month}=26
     ...                        ${year}=1990
     ...                        ${month}=May
 
     Click                      ${DATE_OF_BIRTH}  left
-    Chose month                ${month}
-    Chose year                 ${year}
-    Chose day of the month     ${day_of_month}  ${month}
+    Chose Month                ${month}
+    Chose Year                 ${year}
+    Chose Day Of The Month     ${day_of_month}  ${month}
 
 
-Chose month
+Chose Month
     [Arguments]                ${month}
     Wait For Elements State    ${MONTH_LIST_LOCATOR}  visible  timeout=2 s
     Click                      ${MONTH_LIST_LOCATOR}  left
     Select Options By          ${MONTH_LIST_LOCATOR}  text  ${month}
 
 
-Chose year
+Chose Year
     [Arguments]                ${year}
 
     Wait For Elements State    ${YEAR_LIST_LOCATOR}  visible  timeout=2 s
@@ -45,7 +45,7 @@ Chose year
     Select Options By          ${YEAR_LIST_LOCATOR}   text  ${year}
 
 
-Chose day of the month
+Chose Day Of The Month
     [Arguments]                ${day}  ${month}
 
     ${DAY}                     Catenate  SEPARATOR=  ${DAY_LOCATOR}  ${day}
